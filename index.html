@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venkateshwara Enterprises</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Sticky Header -->
+    <header class="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                
+                <img src="assets/images/logo.jpeg" alt="Logo" class="h-12 w-12 rounded-full shadow" style="object-fit:contain;">
+                <a href="#" class="text-2xl font-bold text-black">Venkateshwara Enterprises</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+            
+            <!-- Desktop Navigation -->
+            <ul id="main-nav" class="hidden lg:flex lg:space-x-8 text-lg font-medium">
+                <li><a href="#home" class="nav-link text-gray-600 hover:text-blue-600 transition-colors duration-300">Home</a></li>
+                <li><a href="#about" class="nav-link text-gray-600 hover:text-blue-600 transition-colors duration-300">About</a></li>
+                <li><a href="#services" class="nav-link text-gray-600 hover:text-blue-600 transition-colors duration-300">Services</a></li>
+                <li><a href="#products" class="nav-link text-gray-600 hover:text-blue-600 transition-colors duration-300">Products</a></li>
+                <li><a href="#contact" class="nav-link text-gray-600 hover:text-blue-600 transition-colors duration-300">Contact Us</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Mobile Navigation Menu (hidden by default) -->
+        <ul id="mobile-menu" class="hidden lg:hidden bg-white shadow-lg py-2">
+            <li><a href="#home" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Home</a></li>
+            <li><a href="#about" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">About</a></li>
+            <li><a href="#services" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Services</a></li>
+            <li><a href="#products" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Products</a></li>
+            <li><a href="#contact" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Contact Us</a></li>
+        </ul>
+    </header>
+
+    <main class="container mx-auto px-4">
+    <!-- Page content will be loaded dynamically from /pages/*.html -->
+    <div id="page-content"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; <span id="footer-year"></span> Venkateshwara Enterprises. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
