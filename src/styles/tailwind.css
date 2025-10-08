@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Project customizations (you can import your existing CSS) */
+@import "../../assets/css/style.css";

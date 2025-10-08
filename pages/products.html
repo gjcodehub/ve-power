@@ -1,27 +1,108 @@
 <!-- Products Section -->
 <section id="products-page" class="page-section py-20">
     <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">Our Products</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        <!-- Product 1 -->
-        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
-            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+A+UPS" alt="Product Image" class="w-full h-48 object-cover rounded-lg mb-4">
+    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- 16 product cards (static placeholders) - hidden inline to avoid flash before JS runs -->
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+1" alt="Product 1" class="w-full h-48 object-cover rounded-lg mb-4">
             <h3 class="text-xl font-bold text-gray-900">Venkateshwara UPS 1500VA</h3>
-            <p class="text-gray-600 mt-2">Ideal for small office and home use, offering reliable protection for computers, routers, and other essential electronics.</p>
+            <p class="text-gray-600 mt-2">Reliable protection for home and small offices.</p>
             <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
         </div>
-        <!-- Product 2 -->
-        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
-            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+B+UPS" alt="Product Image" class="w-full h-48 object-cover rounded-lg mb-4">
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+2" alt="Product 2" class="w-full h-48 object-cover rounded-lg mb-4">
             <h3 class="text-xl font-bold text-gray-900">Venkateshwara Industrial UPS</h3>
-            <p class="text-gray-600 mt-2">A robust solution for industrial applications, providing stable power for manufacturing equipment and critical systems.</p>
+            <p class="text-gray-600 mt-2">Robust solution for industrial applications.</p>
             <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
         </div>
-        <!-- Product 3 -->
-        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
-            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+C+UPS" alt="Product Image" class="w-full h-48 object-cover rounded-lg mb-4">
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+3" alt="Product 3" class="w-full h-48 object-cover rounded-lg mb-4">
             <h3 class="text-xl font-bold text-gray-900">Venkateshwara Smart UPS</h3>
-            <p class="text-gray-600 mt-2">Features advanced monitoring and a compact design, perfect for modern data centers and server rooms.</p>
+            <p class="text-gray-600 mt-2">Advanced monitoring for modern server rooms.</p>
             <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
         </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+4" alt="Product 4" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Solar Inverter</h3>
+            <p class="text-gray-600 mt-2">High-efficiency inverter for solar setups.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+5" alt="Product 5" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Battery 150Ah</h3>
+            <p class="text-gray-600 mt-2">Deep-cycle battery for long backup durations.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+6" alt="Product 6" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Hybrid Inverter</h3>
+            <p class="text-gray-600 mt-2">Combines grid and solar charging.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+7" alt="Product 7" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Rack UPS</h3>
+            <p class="text-gray-600 mt-2">Rack-mounted UPS for server racks.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+8" alt="Product 8" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Telecom UPS</h3>
+            <p class="text-gray-600 mt-2">Telecom-grade backup solutions.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+9" alt="Product 9" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Lithium Battery</h3>
+            <p class="text-gray-600 mt-2">Lightweight lithium batteries with long life.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+10" alt="Product 10" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Power Conditioner</h3>
+            <p class="text-gray-600 mt-2">Protects electronics from voltage spikes.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+11" alt="Product 11" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Battery Charger</h3>
+            <p class="text-gray-600 mt-2">Fast chargers for industrial and consumer batteries.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+12" alt="Product 12" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Inverter Controller</h3>
+            <p class="text-gray-600 mt-2">Controller for inverter modes and battery health.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+13" alt="Product 13" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Accessory Kit</h3>
+            <p class="text-gray-600 mt-2">Kits and cables for installations.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+14" alt="Product 14" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Monitoring Panel</h3>
+            <p class="text-gray-600 mt-2">Monitoring and alert panel for systems.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+15" alt="Product 15" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Service Plan</h3>
+            <p class="text-gray-600 mt-2">Extended service and maintenance plans.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+        <div class="product-card bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center" style="display:none;">
+            <img src="https://placehold.co/400x300/e5e7eb/6b7280?text=Model+16" alt="Product 16" class="w-full h-48 object-cover rounded-lg mb-4">
+            <h3 class="text-xl font-bold text-gray-900">Venkateshwara Custom Solutions</h3>
+            <p class="text-gray-600 mt-2">Tailored power backup solutions for large installations.</p>
+            <button class="mt-4 bg-blue-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">Learn More</button>
+        </div>
+    </div>
+    <!-- Load more controls -->
+    <div class="mt-6 text-center max-w-6xl mx-auto">
+        <div id="products-info" class="text-sm text-gray-600 mb-3" aria-live="polite">Showing 0 of 0 products</div>
+        <button id="load-more" type="button" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">Load more</button>
     </div>
 </section>

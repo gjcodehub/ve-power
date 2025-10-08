@@ -39,23 +39,7 @@
         showSlide(current);
     }
 
-    // After loading all sections, setup slideshow if home section exists
-    Promise.all(
-        [
-            { id: 'home', file: 'pages/home.html' },
-            { id: 'about', file: 'pages/about.html' },
-            { id: 'services', file: 'pages/services.html' },
-            { id: 'products', file: 'pages/products.html' },
-            { id: 'contact', file: 'pages/contact.html' }
-        ].map(section =>
-            fetch(section.file)
-                .then(response => response.text())
-                .then(html => `<div id="${section.id}" class="page-section">${html}</div>`)
-        )
-    ).then(allSections => {
-        pageContent.innerHTML = allSections.join('');
-        setupHomeSlideshow();
-    });
+    // (section loading and slideshow initialization handled on DOMContentLoaded)
 document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -127,7 +111,51 @@ document.addEventListener('DOMContentLoaded', () => {
             showSlide(current);
             startAutoSlide();
         }
+        // Initialize products load-more if present
+        initProductsLoadMore();
     });
+
+    // Load-more behavior for products page: show initial N and reveal on button click
+    function initProductsLoadMore() {
+        try {
+            const pageSection = document.getElementById('products');
+            if (!pageSection) return;
+            const grid = pageSection.querySelector('#product-grid');
+            if (!grid) return;
+            const cards = Array.from(grid.querySelectorAll('.product-card'));
+            const info = pageSection.querySelector('#products-info');
+            const loadMoreBtn = pageSection.querySelector('#load-more');
+            const INITIAL = 6;
+            const STEP = 6;
+            let shown = 0;
+
+            function updateInfo() {
+                if (info) info.textContent = `Showing ${Math.min(shown, cards.length)} of ${cards.length} products`;
+            }
+
+            function showNext(n) {
+                const start = shown;
+                const end = Math.min(shown + n, cards.length);
+                for (let i = start; i < end; i++) {
+                    cards[i].style.display = '';
+                }
+                shown = end;
+                updateInfo();
+                if (shown >= cards.length && loadMoreBtn) loadMoreBtn.style.display = 'none';
+            }
+
+            // hide all initially then show initial batch after a tick
+            cards.forEach(c => { c.style.display = 'none'; });
+            // wait a tick to avoid blocking
+            setTimeout(() => showNext(INITIAL), 20);
+
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => showNext(STEP));
+            }
+        } catch (err) {
+            console.error('initProductsLoadMore error', err);
+        }
+    }
 
     // Event listeners for navigation links
     navLinks.forEach(link => {
