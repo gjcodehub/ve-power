@@ -4,61 +4,766 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venkateshwara Enterprises</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- In production avoid using the Tailwind CDN. Build a local tailwind.css via the Tailwind CLI or PostCSS. -->
-    <link rel="stylesheet" href="assets/css/tailwind.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body class="bg-gray-100 text-gray-800">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-    <!-- Sticky Header -->
-    <header class="fixed top-0 left-0 w-full shadow-md z-50 site-header">
-    <nav class="container mx-auto px-4 py-4 flex items-center justify-between nav-inner">
-            <div class="flex items-center space-x-3">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                const currentYear = new Date().getFullYear();
+                yearSpan.textContent = currentYear;
+            }
+
+            const productRows = document.querySelectorAll('.product-row');
+            const showMoreBtn = document.getElementById('show-more-btn');
+            let currentRowIndex = 0; // Starts at index 0 (product-row-1)
+            const totalRows = productRows.length;
+            
+            // --- 1. Show More Button Logic ---
+            showMoreBtn.addEventListener('click', function() {
+                currentRowIndex++; // Move to the next row
                 
-                <img src="assets/images/logo.jpeg" alt="Logo" class="h-12 w-12 rounded-full shadow" style="object-fit:contain; z-index: 3; position: relative;">
-                <a href="#" class="text-2xl font-bold text-black">Venkateshwara Enterprises</a>
+                if (currentRowIndex < totalRows) {
+                    // Show the next row and mark it as active
+                    productRows[currentRowIndex].classList.add('active-row');
+                    productRows[currentRowIndex].style.display = 'flex'; // Use flex to match Bootstrap's row display
+                }
+                
+                // Check if we reached the end
+                if (currentRowIndex >= totalRows - 1) {
+                    showMoreBtn.style.display = 'none'; // Hide the 'Show More' button
+                    initializePagination(); // Show pagination instead
+                }
+            });
+
+            // --- 2. Pagination Initialization ---
+            const paginationContainer = document.getElementById('product-pagination');
+            const paginationList = paginationContainer.querySelector('.pagination');
+
+            function initializePagination() {
+                // Remove 'active-row' from all rows to switch to pure pagination mode
+                productRows.forEach(row => {
+                    row.classList.remove('active-row');
+                    row.style.display = 'none';
+                });
+                
+                // Show the first row initially
+                productRows[0].style.display = 'flex'; 
+
+                // Show the pagination container
+                paginationContainer.classList.remove('d-none');
+                
+                // Build the pagination links
+                paginationList.innerHTML = ''; // Clear existing links
+                for (let i = 0; i < totalRows; i++) {
+                    const pageNumber = i + 1;
+                    const li = document.createElement('li');
+                    li.className = `page-item ${i === 0 ? 'active' : ''}`;
+                    li.innerHTML = `<a class="page-link" href="#">${pageNumber}</a>`;
+                    li.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        goToPage(i);
+                    });
+                    paginationList.appendChild(li);
+                }
+            }
+
+            // --- 3. Pagination Click Handler ---
+            function goToPage(index) {
+                // Hide all rows
+                productRows.forEach(row => {
+                    row.style.display = 'none';
+                });
+                
+                // Show the selected row
+                productRows[index].style.display = 'flex';
+                
+                // Update active state in pagination
+                document.querySelectorAll('.page-item').forEach((item, i) => {
+                    item.classList.remove('active');
+                    if (i === index) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Scroll to the products section to show the newly loaded page
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // If you want to start with full pagination instead of 'Show More', 
+            // you can call initializePagination() here and hide the showMoreBtn initially.
+
+            // --- Contact Form Status Message Logic ---
+            const contactSection = document.getElementById('contact');
+            const form = document.getElementById('contactForm');
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+
+            if (status && contactSection) {
+                let alertHTML = '';
+                
+                if (status === 'success') {
+                    alertHTML = `
+                        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+                            Thank you! Your message has been sent successfully. We will respond soon.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                    // Clear the form fields on successful submission
+                    if (form) {
+                        form.reset();
+                    }
+                } else if (status === 'error' || status === 'mail_error') {
+                    alertHTML = `
+                        <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                            There was an issue submitting the form. Please check your inputs and try again.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                }
+
+                // Insert the alert message right before the form
+                if (alertHTML) {
+                    form.insertAdjacentHTML('beforebegin', alertHTML);
+                    // Scroll to the contact section to show the message
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>    
+    <style>
+
+        /* === NEW RIBBON STYLES === */
+        #top-ribbon {
+            background-color: #007bff; /* Bright color to stand out (Bootstrap Primary Blue) */
+            width: 100%;
+            position: fixed; /* Fixes it to the top of the screen */
+            top: 0;
+            z-index: 1060; /* Higher than the navbar (1051) but lower than modals */
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        html, body {
+            /* Prevents the browser from miscalculating the viewport height */
+            height: 100%; 
+            /* Ensures the scrollbar is attached to the body/html, not a sub-element */
+            overflow-x: hidden; 
+            scroll-behavior: smooth;
+        }
+        /* Add padding to the top of the body to prevent content being hidden by fixed-top navbar */
+        body {
+            
+            padding-top: calc(84px + 36px); 
+            scroll-padding-top: calc(90px + 36px);
+            
+        }
+
+        /* === Custom Styles for Background and Responsiveness === */
+        #main-header {
+            background: url('assets/images/nav-bg.jpg') no-repeat center center;
+            background-size: cover; 
+            background-attachment: fixed; /* Parallax effect */
+            color: white; 
+            position: relative;
+            z-index: 10; 
+        }
+
+        /* ULTIMATE FIX: Overrides any conflicting inherited styles */
+        .navbar.fixed-top {
+            /* FORCES fixed position */
+            position: fixed !important; 
+            /* FORCES placement at the top */
+            top: 36px !important;
+            /* FORCES full width */
+            width: 100% !important;
+            /* FORCES it above all other elements */
+            z-index: 9999 !important; 
+            
+            background-color: #170433 !important; 
+        }
+        
+        /* Dark overlay for text readability on the home section */
+        #main-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1); 
+            z-index: 15;
+        }
+
+        /* Ensure navbar links are visible */
+        .navbar-custom {
+            position: relative;
+            z-index: 1051;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* LOGO STYLING */
+        .logo-img {
+            width: 100%; 
+            height: 50px;
+            border-radius: 5px; /* Makes it a circle */
+            object-fit: cover; /* Ensures image covers the area */
+        }
+
+
+        /* * === CAROUSEL ADAPTED FOR 3:1 ASPECT RATIO (1200x400) === */
+        #carouselExampleIndicators {
+            position: relative;
+            overflow: hidden;
+            padding-top: 33.33%; 
+        }
+
+        .carousel-inner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .carousel-item img {
+            height: 100%; 
+            width: 100%;
+            object-fit: contain; 
+            opacity: 0.9;
+        }
+        
+        /* * === END CAROUSEL ADAPTATION === */
+
+
+        /* General styling for sections */
+        section {
+            padding: 60px 0;
+        }
+
+        .about-img, .product-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #home{
+            background-color: #170433 !important;
+        }
+
+        /* Ensure carousel controls are always on top and clickable */
+        .carousel-control-prev,
+        .carousel-control-next {
+            z-index: 2000 !important; /* Set higher than most elements (e.g., higher than navbar's 9999) */
+        }
+        
+        @media (max-width: 768px) {
+            .navbar .container {
+                flex-wrap: nowrap;
+            }
+
+            .navbar-brand {
+                font-size: 1 rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .navbar-toggler {
+                margin-left: auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: .9 rem; /* Even smaller for mobile phones */
+            }
+        }
+
+        /* Custom CSS to hide product rows initially */
+        .product-row:not(.active-row) {
+            display: none;
+        }
+        
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="56"> 
+    <div id="top-ribbon" class="text-center py-2">
+        <a href="tel:+919933444434" class="text-white text-decoration-none d-block">
+            📞 Call Now: +91 9933444434
+        </a>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <!-- <img src="assets/images/logo.jpeg" alt="VE Power" class="logo-img me-2"> -->
+                <img src="assets/images/logo-transparent-bg.png" alt="VE Power" class="logo-img me-2">
+                Venkateshwara Enterprises
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="main-header">
+    
+        <section id="home" class="p-0">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-current="false" aria-label="Slide 5"></button>
+                </div>
+                
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="4000">
+                        <img src="assets/images/5.png" class="d-block w-100" alt="Slide 1">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Welcome to Innovation</h5>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="4000">
+                        <img src="assets/images/2.png" class="d-block w-100" alt="Slide 2">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="4000">
+                        <img src="assets/images/3.png" class="d-block w-100" alt="Slide 3">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="4000">
+                        <img src="assets/images/4.png" class="d-block w-100" alt="Slide 4">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="4000">
+                        <img src="assets/images/1.png" class="d-block w-100" alt="Slide 5">
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            <div class="container py-5 text-center">
+                <h1 class="mb-4 text-white">Powering Homes, Offices & Industries with Reliable Backup Solutions</h1>
+                <p class="lead text-white-50">
+                    Welcome to VENKATESHWARA ENTERPRISES, your trusted partner for Online UPS, inverters and batteries sales and service. We provide high-performance power backup solutions designed to keep your homes and business runnning without interruption.
+                </p>
+                <p class="lead text-white-50">
+                    With our wide range of trusted brands, experts installation, and dedicated after-sales support, we ensure you always have a steady power supply when you need it most.
+                </p>
+            </div>
+        </section>
+
+    </div> 
+
+    <section id="about" class="bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">About Us</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 order-md-1 order-2">
+                    
+                    
+                <p>At Venkateshwara Enterprises, we believe in the power of continuity. Since our founding in 2016, our mission has been to deliver robust and dependable power backup solutions that ensure uninterrupted operations for both businesses and homes—even in the most demanding environments.</p>
+                
+                <p>Our legacy in the power supply industry dates back to 2013, when we operated as Power Source Technologies. Between 2013 and 2016, we built a solid foundation of technical expertise and customer trust. In 2016, we rebranded as Venkateshwara Enterprises to expand our services and strengthen our commitment to delivering comprehensive power solutions.</p>
+                
+                <p>With decades of combined experience, our expert team provides end-to-end power services—from consultation and installation to maintenance and ongoing support. We don’t just sell UPS systems; we deliver peace of mind through reliable, tailored power solutions backed by exceptional service.</p>
+                
+                <p>At Venkateshwara Enterprises, your power is our priority.</p>
+                    
+                <!-- <p class="h4 mb-4">Our Vision</p> -->
+                
+                </div>
+                <div class="col-lg-6 col-md-6 text-center mb-4 mb-md-0 order-md-2 order-1">
+                    <img src="assets/images/about-us.png" alt="About Us Team Photo" class="img-fluid about-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="services">
+        <div class="container">
+            <h2 class="text-center mb-5">Our Services</h2>
+            
+            <div class="row text-center">
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="p-4 border rounded shadow-sm h-100">
+                        <h4 class="mb-3">Home Inverter Installation Services</h4>
+                        <p class="text-muted">We offer expert inverter installation with load calculation, safe wiring, and doorstep service for reliable power.</p>
+                        <a href="#" class="btn btn-primary btn-sm">Get in touch</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="p-4 border rounded shadow-sm h-100">
+                        <h4 class="mb-3">Online UPS Installation Services</h4>
+                        <p class="text-muted">We offer professional Online UPS installation with load assessment, safe wiring, and reliable power backup—ideal for commercial, industrial, and IT setups.</p>
+                        <a href="#" class="btn btn-primary btn-sm">Get in touch</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="p-4 border rounded shadow-sm h-100">
+                        <h4 class="mb-3">Online UPS Repair & Maintenance</h4>
+                        <p class="text-muted">We offer expert Online UPS repair and maintenance to ensure reliable power and extend system life.</p>
+                        <a href="#" class="btn btn-primary btn-sm">Get in touch</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="p-4 border rounded shadow-sm h-100">
+                        <h4 class="mb-3">Automotive Battery Sales</h4>
+                        <p class="text-muted">We offer reliable, long-lasting batteries for all bikes and cars—quick start, strong backup, smooth rides.</p>
+                        <a href="#" class="btn btn-primary btn-sm">Get in touch</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Our Featured Products</h2>
+            
+            <div class="row product-row active-row" id="product-row-1">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p1.png" class="card-img-top product-img" alt="Product 1">
+                        <div class="card-body">
+                            <h5 class="card-title">Luminous Eco Volt Neo 1050 VA Sine Wave Inverter</h5>  
+                            <p class="card-text">The Luminous Eco Volt Neo 1050 is a reliable pure sine wave inverter designed for home, office, and shop use, offering smooth and efficient power backup with a capacity of 900 VA.</p>
+                            <ul>
+                                <li>Output: Pure sine wave</li>
+                                <li>Capacity: 900 VA / 12V</li>
+                                <li>Battery Support: Single battery system</li>
+                                <li>Battery Types: Compatible with tubular, flat plate, and VRLA</li>
+                                <li>Features: Intelligent battery management, low harmonic distortion</li>
+                                <li>Warranty: 36 months</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p2.png" class="card-img-top product-img" alt="Product 2">
+                        <div class="card-body">
+                            <h5 class="card-title">Exide Inverterz Star 1125 VA Sine Wave Inverter</h5>
+                            <p class="card-text">The Exide Inverterz Star 1125 VA is a microcontroller-based pure sine wave inverter designed for reliable power backup in homes, offices, and shops. It offers smooth and efficient performance with advanced features for fluctuating grid conditions.</p>
+                            <ul>
+                                <li>Rated Capacity: 1125 VA / 900 Watts</li>
+                                <li>Technology: Microcontroller-based pure sine wave</li>
+                                <li>Battery Compatibility: 12V system; supports 150AH to 200AH batteries</li>
+                                <li>Input Voltage Range: 90V to 300V AC</li>
+                                <li>Display: LED indicators</li>
+                                <li>Warranty: 36 months + 6 months extended</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p3.png" class="card-img-top product-img" alt="Product 3">
+                        <div class="card-body">
+                            <h5 class="card-title">Luminous RC 18000 Pro 150Ah Tall Tubular Battery</h5>
+                            <p class="card-text">The Luminous RC 18000 Pro is a 150Ah tall tubular inverter battery designed for long-lasting performance and reliable power backup in homes and offices.</p>
+                            <ul>
+                                <li>Battery Type: Tall Tubular (RedCharge series)</li>
+                                <li>Capacity: 150Ah, 12V</li>
+                                <li>Design: Rugged tubular plates for deep discharge cycles</li>
+                                <li>Warranty: 48 months (24 months free + 24 months pro-rata)</li>
+                                <li>Performance: High Rate Discharge and Short Frequent Cycle support</li>
+                                <li>Maintenance: Low maintenance with high electrolyte retention</li>
+                                <li>Compatibility: Works with sine wave inverters</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
             </div>
             
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="lg:hidden p-2 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-            
-            <!-- Desktop Navigation -->
-            <ul id="main-nav" class="hidden lg:flex lg:space-x-8 text-lg font-medium">
-                <li><a href="#home" class="nav-link text-black hover:text-blue-200 transition-colors duration-300">Home</a></li>
-                <li><a href="#about" class="nav-link text-black hover:text-blue-200 transition-colors duration-300">About</a></li>
-                <li><a href="#services" class="nav-link text-black hover:text-blue-200 transition-colors duration-300">Services</a></li>
-                <li><a href="#products" class="nav-link text-black hover:text-blue-200 transition-colors duration-300">Products</a></li>
-                <li><a href="#contact" class="nav-link text-black hover:text-blue-200 transition-colors duration-300">Contact Us</a></li>
-            </ul>
-        </nav>
-        
-        <!-- Mobile Navigation Menu (hidden by default) -->
-        <ul id="mobile-menu" class="hidden lg:hidden bg-white shadow-lg py-2">
-            <li><a href="#home" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Home</a></li>
-            <li><a href="#about" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">About</a></li>
-            <li><a href="#services" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Services</a></li>
-            <li><a href="#products" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Products</a></li>
-            <li><a href="#contact" class="nav-link block px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-300">Contact Us</a></li>
-        </ul>
-    </header>
+            <div class="row product-row" id="product-row-2">
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p4.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Exide IMTT 1500 150Ah Tall Tubular Battery</h5>
+                            <p class="card-text">The Exide IMTT 1500 is a high-performance tall tubular inverter battery from the InvaMaster series, designed for long power backup and durability in demanding conditions.</p>
+                            <ul>
+                                <li>Battery Type: Tall Tubular (InvaMaster Series)</li>
+                                <li>Capacity: 150Ah, 12V</li>
+                                <li>Design: Tubular plate design for deep discharge and long life</li>
+                                <li>Dimensions (L×W×H): 512 × 192 × 466 mm</li>
+                                <li>Weight: Approx. 58.1 kg (filled)</li>
+                                <li>Warranty: 60 months (36 months full + 24 months pro-rata)</li>
+                                <li>Applications: Ideal for home, office, and commercial inverter systems</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p5.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Exide XLTZ4A Bike Battery</h5>
+                            <p class="card-text">The Exide XLTZ4A is a zero-maintenance VRLA battery designed for two-wheelers, offering reliable performance and long life under tough road conditions.</p>
+                            <ul>
+                                <li>Battery Type: VRLA (Valve Regulated Lead Acid)</li>
+                                <li>Capacity: 4Ah</li>
+                                <li>Voltage Output: 12.4V</li>
+                                <li>Maintenance: Zero maintenance, factory charged</li>
+                                <li>Compatibility: Suitable for bikes from Bajaj, Hero, TVS, Suzuki, Honda</li>
+                                <li>Number of Cells: 6</li>
+                                <li>Warranty: 48 months (24 months free replacement)</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p6.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Exide IMTT 1500 150Ah Tall Tubular Battery</h5>
+                            <p class="card-text">The Exide IMTT 1500 is a high-performance tall tubular inverter battery from the InvaMaster series, designed for long power backup and durability in demanding conditions.</p>
+                            <ul>
+                                <li>Battery Type: Tall Tubular (InvaMaster Series)</li>
+                                <li>Capacity: 150Ah, 12V</li>
+                                <li>Design: Tubular plate design for deep discharge and long life</li>
+                                <li>Dimensions (L×W×H): 512 × 192 × 466 mm</li>
+                                <li>Weight: Approx. 58.1 kg (filled)</li>
+                                <li>Warranty: 60 months (36 months full + 24 months pro-rata)</li>
+                                <li>Applications: Ideal for home, office, and commercial inverter systems</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
 
-    <main class="container mx-auto px-4">
-    <!-- Page content will be loaded dynamically from /pages/*.html -->
-    <div id="page-content"></div>
-    </main>
+            <div class="row product-row" id="product-row-3">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p7.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                              <h5 class="card-title">Exide XLTZ4A Bike Battery</h5>
+                        <p class="card-text">The Exide XLTZ4A is a zero-maintenance VRLA battery designed for two-wheelers, offering reliable performance and long life under tough road conditions.</p>
+                        <ul>
+                            <li>Battery Type: VRLA (Valve Regulated Lead Acid)</li>
+                            <li>Capacity: 4Ah</li>
+                            <li>Voltage Output: 12.4V</li>
+                            <li>Maintenance: Zero maintenance, factory charged</li>
+                            <li>Compatibility: Suitable for bikes from Bajaj, Hero, TVS, Suzuki, Honda</li>
+                            <li>Number of Cells: 6</li>
+                            <li>Warranty: 48 months (24 months free replacement)</li>
+                        </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>    
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p8.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">APC Back-UPS Pro 1000</h5>
+                            <p class="card-text">The APC Back-UPS Pro 1000 is a high-efficiency uninterruptible power supply (UPS) designed to protect sensitive electronics and provide extended backup during outages.</p>
+                            <ul>
+                                <li>Model: BR1000G-IN</li>
+                                <li>Capacity: 1000VA / 600W</li>
+                                <li>Output: 6x India 6A outlets</li>
+                                <li>Features: Automatic Voltage Regulation (AVR), LCD display, user-replaceable battery</li>
+                                <li>Ports: 2 USB smart charging ports</li>
+                                <li>Protection: Surge protection for data and power lines</li>
+                                <li>Use Case: Ideal for computers, routers, and home office equipment</li>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-6">
-        <div class="container mx-auto text-center">
-            <p>&copy; <span id="footer-year"></span> Venkateshwara Enterprises. All Rights Reserved.</p>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p9.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">APC Online UPS (SRC1KI-IN)</h5>
+                            <p class="card-text">The APC SRC1KI-IN is a 1KVA online double-conversion UPS designed for critical systems requiring continuous and clean power delivery.</p>
+                            <ul>
+                                <li>Type: Online / Double-conversion UPS</li>
+                                <li>Capacity: 1KVA / 800W</li>
+                                <li>Input/Output Voltage: 230V</li>
+                                <li>Frequency Range: Input 40–70 Hz, Output 50 ± 3 Hz</li>
+                                <li>Display: Digital LCD with overload protection</li>
+                                <li>Outlets: 3 output plugs</li>
+                                <li>Applications: Servers, networking, and sensitive electronics</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row product-row" id="product-row-4">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p13.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Product 4 Title</h5>
+                            <p class="card-text">Description for Product 4.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p14.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Product 4 Title</h5>
+                            <p class="card-text">Description for Product 4.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="assets/images/p15.png" class="card-img-top product-img" alt="Product 4">
+                        <div class="card-body">
+                            <h5 class="card-title">Product 4 Title</h5>
+                            <p class="card-text">Description for Product 4.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+            <div class="text-center mt-5">
+                <button id="show-more-btn" class="btn btn-primary btn-lg px-5">Show More Products</button>
+                
+                <nav id="product-pagination" class="d-none">
+                    <ul class="pagination justify-content-center">
+                        </ul>
+                </nav>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="text-center mb-5">Contact Us</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form action="send_mail.php" method="POST" id="contactForm">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="inputName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="inputName" placeholder="Your Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputEmail" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="xxx@gmail.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputMobileNumber" class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" id="inputMobileNumber" placeholder="9933444434" pattern="\d{10}" title="Mobile number must be exactly 10 digits" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputSubject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="inputSubject" placeholder="Inquiry Subject" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="inputMessage" class="form-label">Message</label>
+                            <textarea class="form-control" id="inputMessage" rows="5" placeholder="Your message here..." required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">Send Message</button>
+                        </div>
+                    </form>
+                    <hr class="my-5">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <h5>Location</h5>
+                            <p class="text-muted">No 42, KCDC Road, 3rd Cross, Vinayaka Nagar, Kudlu, Bangalore, India</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h5>Call Us</h5>
+                            <p class="text-muted">+91 99807 08427, +91 81477 01247</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h5>Email</h5>
+                            <p class="text-muted">venkateshwaraenterprises16@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p class="m-0">&copy; <span id="current-year"></span> Venkateshwara Enterprises. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <script src="assets/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

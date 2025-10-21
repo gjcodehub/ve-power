@@ -2,14 +2,14 @@
   "name": "ve-power",
   "version": "1.0.0",
   "private": true,
-    "scripts": {
+  "scripts": {
     "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/css/tailwind.css --minify",
     "build.css": "npm run build:css",
     "watch:css": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/css/tailwind.css --watch"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.4.4"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
   }
 }
