@@ -132,7 +132,7 @@
             }
 
 
-            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
         const navbarCollapse = document.getElementById('navbarNav');
         
         navLinks.forEach(link => {
@@ -140,10 +140,13 @@
                 // Check if the menu is currently expanded
                 if (navbarCollapse.classList.contains('show')) {
                     // Use Bootstrap's native JS method to hide the collapse element
-                    const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
-                        toggle: false
-                    });
-                    bsCollapse.hide();
+                    setTimeout(() => {
+                        // Use Bootstrap's native JS method to hide the collapse element
+                        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                            toggle: false
+                        });
+                        bsCollapse.hide();
+                    }, 300);
                 }
             });
         });
