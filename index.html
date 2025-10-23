@@ -132,24 +132,24 @@
             }
 
 
-        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-        const navbarCollapse = document.getElementById('navbarNav');
-        
-        navLinks.forEach(link => {
-            link.addEventListener('click', function () {
-                // Check if the menu is currently expanded
-                if (navbarCollapse.classList.contains('show')) {
-                    // Use Bootstrap's native JS method to hide the collapse element
-                    setTimeout(() => {
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            const navbarCollapse = document.getElementById('navbarNav');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    // Check if the menu is currently expanded
+                    if (navbarCollapse.classList.contains('show')) {
                         // Use Bootstrap's native JS method to hide the collapse element
-                        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
-                            toggle: false
-                        });
-                        bsCollapse.hide();
-                    }, 300);
-                }
+                        setTimeout(() => {
+                            // Use Bootstrap's native JS method to hide the collapse element
+                            const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                                toggle: false
+                            });
+                            bsCollapse.hide();
+                        }, 300);
+                    }
+                });
             });
-        });
         });
     </script>    
     <style>
