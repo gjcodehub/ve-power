@@ -1,6 +1,6 @@
 <?php
 // Define the email address where you want to receive the messages
-$receiving_email_address = 'xxxx@gmail.com'; // **CHANGE THIS to YOUR actual email address**
+$receiving_email_address = 'venkateshwaraenterprises16@gmail.com'; // **CHANGE THIS to YOUR actual email address**
 
 // Check if the form was submitted using the POST method
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
